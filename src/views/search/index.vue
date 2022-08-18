@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-    import {onMounted, reactive, toRefs} from 'vue';
+    import {onMounted, reactive} from 'vue';
 
     const data = reactive({
         params: null,

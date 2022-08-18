@@ -1,29 +1,7 @@
 <template>
     <div class="container">
-        <header>
-            <div class="header-inner">
-                <el-menu
-                    :default-active="data.activeIndex"
-                    class="el-menus"
-                    mode="horizontal"
-                    :ellipsis="false"
-                    :router="true"
-                    @select="handleSelect"
-                >
-                    <el-menu-item index="/index">LOGO</el-menu-item>
-                    <div class="flex-grow" >
+        <Header></Header>
 
-                    </div>
-                    <el-menu-item index="/index">首页</el-menu-item>
-                    <el-menu-item index="/about">关于</el-menu-item>
-                    <el-sub-menu index="/user">
-                        <template #title>我的</template>
-                        <el-menu-item index="/edit">编辑</el-menu-item>
-                        <el-menu-item index="/logout">退出</el-menu-item>
-                    </el-sub-menu>
-                </el-menu>
-            </div>
-        </header>
         <div class="main">
             <div class="main-inner">
                 <el-input   v-model="data.keyword"
@@ -44,6 +22,11 @@
 
 <script setup lang="ts">
     import {onMounted, reactive} from 'vue';
+    import Header from "@/components/Header.vue";
+
+    components:{
+        Header
+    }
 
     interface  Params{
         activeIndex:string,
@@ -76,38 +59,12 @@
 
 
 
-  header {
-    /*首页导航背景颜色*/
-    $bgColor: #f5f5f5;
-    $headerH:90px;
-
-    height: $headerH;
-    width: 100%;
-    background-color:  $bgColor;
-    color: #555;
-    .header-inner{
-      background: rgba(43, 72, 101, 0.6);
-      max-width: 1100px;
-      margin: 0px auto;
-
-      .el-menus{
-        background: $bgColor;
-        border: 0px;
-        height: $headerH;
-        font-size: 24px;
-      }
-
-      .flex-grow {
-        flex-grow: 1;
-      }
-    }
-  }
-
   .main{
 
     .main-inner{
       margin: 100px auto 0px;
-      width: 800px;
+      max-width: 800px;
+      padding: 0px 20px;
 
       .el-input::v-deep {
         .el-input-group__append {

@@ -19,6 +19,7 @@ declare module '@vue/runtime-core' {
     ElMenu: typeof import('element-plus/es')['ElMenu']
     ElMenuItem: typeof import('element-plus/es')['ElMenuItem']
     ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
+    Header: typeof import('./src/components/Header.vue')['default']
     IEpAddLocation: typeof import('~icons/ep/add-location')['default']
     IEpAim: typeof import('~icons/ep/aim')['default']
     IEpSearch: typeof import('~icons/ep/search')['default']
