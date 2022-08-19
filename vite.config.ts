@@ -40,5 +40,13 @@ export default defineConfig({
             // @ 就代表 ./src 下面的
             '@': fileURLToPath(new URL('./src', import.meta.url)),
         }
+    },
+    css:{
+        preprocessorOptions:{
+            scss: {
+                additionalData: `@import "@/assets/css/style.scss";`
+            }
+        }
     }
+
 })

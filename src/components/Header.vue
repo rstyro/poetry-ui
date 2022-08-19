@@ -38,10 +38,12 @@
 
 <style scoped lang="scss">
 
+
+
   header {
     /*首页导航背景颜色*/
-    $bgColor: #f5f5f5;
-    $headerH: 90px;
+    //$bgColor: #f5f5f5;
+    //$headerH: 90px;
 
     height: $headerH;
     width: 100%;
@@ -50,7 +52,7 @@
 
     .header-inner {
       background: rgba(43, 72, 101, 0.6);
-      max-width: 1100px;
+      max-width: $mainWidth;
       margin: 0px auto;
 
       .el-menus {
