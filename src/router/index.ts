@@ -19,6 +19,11 @@ const routes:Array<RouteRecordRaw> = [     //主路由模块容器
         meta:{
             title:"首页"
         }
+    },
+    {
+        path: '/search',
+        name: 'search',
+        component: () => import("@/views/search/index.vue")
     }
 ]
 const router = createRouter({

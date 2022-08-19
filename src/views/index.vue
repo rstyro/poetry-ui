@@ -1,18 +1,43 @@
 <template>
     <div class="container">
-        <Header></Header>
-
         <div class="main">
             <div class="main-inner">
-                <el-input   v-model="data.keyword"
-                          size="large"
-                          placeholder="请输入搜索的关键字">
-                    <template #append>
-                        <el-button class="btn-search" @click="search">
-                            <el-icon class="el-icon--left"><i-ep-search /></el-icon>搜索
-                        </el-button>
+                <div class="search-tip">
+                    <h1>古文检索</h1>
+                    <p>这是一个最全的中华古典文集数据库检索系统</p>
+                    <p>包含 5.5 万首唐诗、26 万首宋诗、2.1 万首宋词和其他古典文集。诗人包括唐宋两朝近 1.4 万古诗人，和两宋时期 1.5 千古词人。数据来源于互联网。</p>
+                </div>
+                <el-autocomplete class="search-input"
+                                 v-model="keyword"
+                                 :clearable="true"
+                                 :fetch-suggestions="searchSuggest"
+                                 popper-class="my-autocomplete"
+                                 placeholder="请输入搜索的关键字,按下回车键 即可搜索"
+                                 @select="selectSuggest"
+                                 @keydown.enter="toSearch"
+                >
+                    <template #prefix>
+                        <el-icon class="el-icon--left">
+                            <i-ep-search/>
+                        </el-icon>
                     </template>
-                </el-input>
+
+                    <template #default="{ item }">
+                        <div class="value">{{ item.key }}</div>
+                        <div class="value">{{ item.value }}</div>
+                    </template>
+                </el-autocomplete>
+                <div class="search-tip-footer">
+                    <p>热门检索:
+                        <span>李白</span>
+                        <span>杜甫</span>
+                        <span>王维</span>
+                        <span>白居易</span>
+                        <span>苏轼</span>
+                        <span>胖不了小陆</span>
+                    </p>
+                    <p>数据来源：https://github.com/chinese-poetry</p>
+                </div>
             </div>
         </div>
     </div>
@@ -21,32 +46,57 @@
 </template>
 
 <script setup lang="ts">
-    import {onMounted, reactive} from 'vue';
-    import Header from "@/components/Header.vue";
+    import {onMounted, reactive, ref} from 'vue';
+    import {useRouter} from "vue-router";
 
-    components:{
-        Header
+    // 提示的对象
+    interface SuggestItem {
+        key: string
+        value: string
     }
 
-    interface  Params{
-        activeIndex:string,
-        keyword:string
+    const router = useRouter();
+    const suggestKwList = ref<SuggestItem[]>([]);
+
+    const keyword = ref<string>('');
+
+    // todo 提示，自动补全
+    const searchSuggest = (kw: string, cb) => {
+        console.log("kw=", kw);
+        console.log("suggestKwList:", suggestKwList);
+        setTimeout(() => {
+            suggestKwList.value = [];
+            suggestKwList.value.push({
+                key: "title",
+                value: "李白"
+            });
+            suggestKwList.value.push({
+                key: "content",
+                value: "诗仙"
+            })
+            suggestKwList.value.push({
+                key: "title",
+                value: "杜甫"
+            })
+        }, 200);
+        cb(suggestKwList.value);
+    }
+    const selectSuggest = (item: SuggestItem) => {
+        console.log("选中提示词:", item.key, item.value);
+        keyword.value = item.value;
     }
 
-    const data:Params = reactive<Params>({
-        activeIndex: "/index",
-        keyword:""
-    });
-    console.log(data)
-    const handleSelect = (key: string, keyPath: string[]) => {
-        console.log(key, keyPath)
+    const toSearch = () => {
+        console.log("q=", keyword.value);
+        router.push({
+            name: "search", query: {
+                q: keyword.value
+            }
+        });
     }
 
-    const search=()=>{
-        console.log("keyword:",data.keyword)
-    }
     onMounted(() => {
-
+        //todo 初始化操作
     })
 </script>
 
@@ -54,25 +104,50 @@
   .container {
     width: 100%;
     height: 100vh;
-    //background: #1a1a1a;
+    background: #111 url('@/assets/images/bg.jpg') no-repeat center;
   }
 
+  .main {
+    padding-top: 30vh;
+    text-align: center;
+    color: white;
 
-
-  .main{
-
-    .main-inner{
-      margin: 100px auto 0px;
-      max-width: 800px;
+    .main-inner {
+      margin: 0px auto;
       padding: 0px 20px;
 
-      .el-input::v-deep {
-        .el-input-group__append {
-          border: 0px solid var(--el-border-color);
-          border-left: 0;
-          background-color: #409eff !important;
-          color: #fff;
+      .search-tip {
+        padding: 10px 0px;
+
+        h1 {
+          letter-spacing: 10px;
         }
+
+        p {
+          word-spacing: 5px;
+          letter-spacing: 2px;
+          padding-bottom: 5px;
+        }
+      }
+
+      .search-tip-footer {
+        margin-top: 10px;
+        color: #ccc;
+
+        p {
+          margin-bottom: 10px;
+
+          span {
+            display: inline-block;
+            margin-right: 10px;
+          }
+        }
+
+      }
+
+      :deep(.el-input__wrapper) {
+        height: 45px;
+        width: 40vw !important;
       }
     }
   }

@@ -5,7 +5,11 @@ import router from "./router";
 createApp(App).use(router).mount('#app')
 
 
+// 路由前置拦截器
 router.beforeEach((to, from, next) => {
-    // document.title=to.meta.title;
+    if(to.path==="/search" && to.query.q){
+        // 把搜索的内容变成标题
+        document.title=to.query.q;
+    }
     next();
 })
