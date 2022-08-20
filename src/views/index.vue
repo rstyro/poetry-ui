@@ -36,7 +36,7 @@
                         <span>苏轼</span>
                         <span>胖不了小陆</span>
                     </p>
-                    <p>数据来源：https://github.com/chinese-poetry</p>
+                    <p>数据来源：https://github.com/chinese-poetry/chinese-poetry</p>
                 </div>
             </div>
         </div>

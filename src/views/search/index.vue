@@ -4,7 +4,7 @@
         <div class="main">
             <div class="main-header">
                 <div class="main-header-input">
-                    <el-input v-model="data.keyword"
+                    <el-input v-model="dto.kw"
                               size="large"
                               placeholder="请输入搜索的关键字">
                         <template #append>
@@ -17,13 +17,12 @@
                         </template>
                     </el-input>
                 </div>
-
             </div>
 
+            <div class="result">为您找到相关结果约 {{ data.total }} 个结果 ，查询耗时 {{ data.took }}毫秒</div>
             <div class="content">
                 <div class="left">
-
-                    <el-card class="poetry-card" v-for="item of poetryList">
+                    <el-card class="poetry-card" v-for="item of data.poetryList">
                         <template #header>
                             <div class="poetry-title">
                                 <span>{{ item.title }}</span>
@@ -35,7 +34,7 @@
                         </div>
 
                         <div class="poetry-content">
-                            <p v-for="text of item.content" >{{ text }}</p>
+                            <p v-for="(text,index) in item.content.slice(0,3)" >{{ index<2?text:'......' }}</p>
                         </div>
 
                         <div style="width: 150px;float: right">
@@ -44,17 +43,16 @@
                     </el-card>
 
 
-
                 </div>
                 <div class="right">
                     <div class="aside">
                         <div class="aside-title">标签</div>
                         <div class="aside-content">
-                            <el-checkbox-group v-model="tags">
-                                <p><el-checkbox label="自信" /></p>
-                                <p><el-checkbox label="唐诗三百首"  checked="true"/></p>
-                                <p><el-checkbox label="爱情" /></p>
-                                <p><el-checkbox label="风景" /></p>
+                            <el-checkbox-group  v-model="dto.filters.tags"
+                            @change="checkboxChange">
+                                <p v-for="tag in data.tags" >
+                                    <el-checkbox :label="tag.key" >{{tag.key  }} ({{tag.docCount}})</el-checkbox>
+                                </p>
                             </el-checkbox-group>
                         </div>
                     </div>
@@ -63,10 +61,10 @@
                     <div class="aside">
                         <div class="aside-title">年代</div>
                         <div class="aside-content">
-                            <el-checkbox-group v-model="tags">
-                                <p><el-checkbox label="宋朝" /></p>
-                                <p><el-checkbox label="唐朝" /></p>
-                                <p><el-checkbox label="上下五千年" /></p>
+                            <el-checkbox-group v-model="dto.filters.dynastyList">
+                                <p v-for="tag in data.dynastyList" >
+                                    <el-checkbox :label="tag.key" >{{tag.key  }} ({{tag.docCount}})</el-checkbox>
+                                </p>
                             </el-checkbox-group>
                         </div>
                     </div>
@@ -74,10 +72,10 @@
                     <div class="aside">
                         <div class="aside-title">作者</div>
                         <div class="aside-content">
-                            <el-checkbox-group v-model="tags">
-                                <p><el-checkbox label="李白" /></p>
-                                <p><el-checkbox label="杜甫" /></p>
-                                <p><el-checkbox label="王维" /></p>
+                            <el-checkbox-group v-model="dto.filters.authorList">
+                                <p v-for="tag in data.authorList" >
+                                    <el-checkbox :label="tag.key" >{{tag.key  }} ({{tag.docCount}})</el-checkbox>
+                                </p>
                             </el-checkbox-group>
                         </div>
                     </div>
@@ -85,12 +83,10 @@
                     <div class="aside">
                         <div class="aside-title">类型</div>
                         <div class="aside-content">
-                            <el-checkbox-group v-model="tags">
-                                <p><el-checkbox label="五言律诗" /></p>
-                                <p><el-checkbox label="散文" /></p>
-                                <p><el-checkbox label="七言绝句" /></p>
-                                <p><el-checkbox label="三字经" /></p>
-                                <p><el-checkbox label="三字经三字经三字经三字经三字经" /></p>
+                            <el-checkbox-group v-model="dto.filters.typeList">
+                                <p v-for="tag in data.typeList" >
+                                    <el-checkbox :label="tag.key" >{{tag.key  }}({{tag.docCount}})</el-checkbox>
+                                </p>
                             </el-checkbox-group>
                         </div>
                     </div>
@@ -103,72 +99,129 @@
 </template>
 
 <script setup lang="ts">
-    import {onMounted, reactive} from 'vue';
+    import {onMounted, reactive, ref} from 'vue';
     import Header from "@/components/Header.vue";
+    import {getSearchList} from "@/api/module/search";
+    import {useRouter, useRoute} from "vue-router";
 
     components:{
         Header
     }
-    interface PoetryItem{
-        title:string,
-        author:string,
-        content:string[],
-        tags:string[]
-    }
 
-    interface Aggs{
-        key:string,
-        size:number,
-        values:any[]
-    }
-
-    interface Params {
+    // data数据对象
+    interface Data {
         activeIndex: string,
-        keyword: string
+        keyword: string,
+        total: number,
+        took: number,
+        poetryList: any[],
+        tags: any[],
+        dynastyList: any[],
+        authorList: any[],
+        typeList: any[]
     }
 
-    const poetryList = reactive<PoetryItem[]>([]);
+    // 右侧 过滤项
+    interface FilterDto{
+        tags: string[],
+        dynastyList: string[],
+        authorList: string[],
+        typeList: string[]
+    }
 
-    const data: Params = reactive<Params>({
+    // 请求的参数类
+    interface Dto {
+        kw: string,
+        needRecords: boolean,
+        aggsList: any[],
+        filters: FilterDto,
+    }
+
+
+
+    const router = useRouter();
+    const route = useRoute();
+
+    // 数据初始化
+    const data: Data = reactive<Data>({
         activeIndex: "/index",
-        keyword: ""
+        keyword: "",
+        total: 0,
+        took: 100,
+        poetryList: [],
+        tags: [],
+        dynastyList: [],
+        authorList: [],
+        typeList: []
     });
 
-    const tags = reactive([]);
+    const dto: Dto = reactive({
+        kw: '',
+        needRecords: true,
+        aggsList: [
+            {
+                "key": "type",
+                "size": 10
+            },
+            {
+                "key": "dynasty",
+                "size": 10
+            },
+            {
+                "key": "tags",
+                "size": 10
+            },
+            {
+                "key": "author.keyword",
+                "size": 10
+            }
 
-    console.log(data)
+        ],
+        filters: {},
+    });
+
+    // 下拉选中
     const handleSelect = (key: string, keyPath: string[]) => {
         console.log(key, keyPath)
     }
 
+    // 点击搜索
     const search = () => {
-        console.log("keyword:", data.keyword)
+        console.log("点击搜索=keyword:", data.keyword);
+        console.log("点击搜索=dto:", dto);
+        getSearchList(dto).then((res: any) => {
+            console.log("res:", res);
+            let tagsList = res.data.aggregation.filter(item=>item.key === 'tags');
+            if(tagsList){
+                data.tags =tagsList[0]?.list;
+            }
+            let dynastyList = res.data.aggregation.filter(item=>item.key === 'dynasty');
+            if(dynastyList){
+                data.dynastyList =dynastyList[0]?.list;
+            }
+            let authorList = res.data.aggregation.filter(item=>item.key === 'author.keyword');
+            if(authorList){
+                data.authorList =authorList[0]?.list;
+            }
+            let typeList = res.data.aggregation.filter(item=>item.key === 'type');
+            if(typeList){
+                data.typeList =typeList[0]?.list;
+            }
+            // 结果集
+            data.took=res.data.took;
+            data.total=res.data.total;
+            data.poetryList=res.data.records;
+        })
     }
+
+    const checkboxChange=(value: string[])=>{
+        console.log("多选框：value：",value)
+    }
+
     onMounted(() => {
-        console.log(poetryList)
-        console.log(poetryList.values())
-        poetryList.push({
-            title:"将进酒",
-            author:"李白",
-            content:["君不见黄河之水天上来，奔流到海不复回","君君不见高堂明镜悲白发，朝如青..."],
-            tags:["自信","豪迈"]
-        });
-        poetryList.push({
-            title:"赠花卿",
-            author:"杜甫",
-            content:["锦城丝管日纷纷，半入江风半入云"
-                ,"此曲只应天上有，人间能得几回闻"
-            ],
-            tags:["惊艳","感叹"]
-        });
-        poetryList.push({
-            title:"观公孙大娘弟子舞剑器行",
-            author:"杜甫",
-            content:["大历二年十月十九日，夔府别驾元持宅"
-                ,"见临颍李十二娘舞剑器，壮其蔚跂，问其所师，曰：“余公孙大娘弟子也。"
-            ,"开元三载，余尚童稚，记于郾城观公孙氏，舞剑器浑脱"],
-            tags:["惊艳","感叹"]
-        });
+        // 得到地址栏q参数
+        dto.kw  = <string>route.query?.q;
+        search();
     })
 </script>
 
@@ -197,6 +250,14 @@
 
     }
 
+    .result {
+      color: #999;
+      font-size: 13px;
+      line-height: 39px;
+      max-width: $mainWidth;
+      margin: 0px auto;
+    }
+
     .content {
       display: flex;
       justify-content: space-around;
@@ -212,12 +273,12 @@
           margin-bottom: 20px;
 
 
-          :deep(.el-card__header){
-                //padding-bottom: 0px;
+          :deep(.el-card__header) {
+            //padding-bottom: 0px;
             border: 0px;
           }
 
-          :deep(.el-card__body){
+          :deep(.el-card__body) {
             padding-top: 0px;
           }
 
@@ -230,7 +291,7 @@
             letter-spacing: 5px;
             padding: 20px 0px;
 
-            p{
+            p {
               font-size: 16px;
               padding-bottom: 10px;
             }
@@ -249,27 +310,24 @@
       }
 
       .right {
-        width: 350px;
+        min-width: 350px;
         margin-left: 50px;
-        //box-shadow: 0 0 6px rgb(202 203 203 / 50%);
-        //-webkit-box-shadow: 0 0 6px rgb(202 203 203 / 50%);
-        //background: #cccccc;
 
-        .aside{
-            padding: 20px;
-            //border: 1px solid #999999;
+        .aside {
+          padding: 20px;
+          //border: 1px solid #999999;
           background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
 
-          &:nth-child(n+2){
+          &:nth-child(n+2) {
             margin-top: 20px;
           }
 
-          .aside-title{
+          .aside-title {
             font-size: 26px;
             //background: #fbc2eb;
           }
 
-          .aside-content{
+          .aside-content {
             margin-top: 20px;
           }
         }
