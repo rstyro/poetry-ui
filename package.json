@@ -18,7 +18,6 @@
   "devDependencies": {
     "@iconify-json/ep": "^1.1.7",
     "@vitejs/plugin-vue": "^3.0.3",
-    "node-sass": "^7.0.1",
     "sass": "^1.54.4",
     "sass-loader": "^13.0.2",
     "typescript": "^4.6.4",
