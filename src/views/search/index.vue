@@ -6,9 +6,12 @@
                 <div class="main-header-input">
                     <el-input v-model="dto.kw"
                               size="large"
+                              @keydown.enter="search"
                               placeholder="请输入搜索的关键字">
                         <template #append>
-                            <el-button class="btn-search" @click="search">
+                            <el-button class="btn-search"
+
+                                       @click="search">
                                 <el-icon class="el-icon--left">
                                     <i-ep-search/>
                                 </el-icon>
@@ -19,7 +22,7 @@
                 </div>
             </div>
 
-            <div class="result">为您找到相关结果约 {{ data.total }} 个结果 ，查询耗时 {{ data.took }}毫秒</div>
+            <div class="result">为您找到相关结果约 {{ data.totalNum.toFixed(0) }} 个结果 ，查询耗时 {{ data.took }}毫秒</div>
             <div class="content">
                 <div class="left">
                     <el-card class="poetry-card" v-for="item of data.poetryList">
@@ -34,7 +37,7 @@
                         </div>
 
                         <div class="poetry-content">
-                            <p v-for="(text,index) in item.content.slice(0,3)" >{{ index<2?text:'......' }}</p>
+                            <p v-for="(text,index) in item.content.slice(0,3)">{{ index < 2 ? text : '......' }}</p>
                         </div>
 
                         <div style="width: 150px;float: right">
@@ -48,10 +51,10 @@
                     <div class="aside">
                         <div class="aside-title">标签</div>
                         <div class="aside-content">
-                            <el-checkbox-group  v-model="dto.filters.tags"
-                            @change="checkboxChange">
-                                <p v-for="tag in data.tags" >
-                                    <el-checkbox :label="tag.key" >{{tag.key  }} ({{tag.docCount}})</el-checkbox>
+                            <el-checkbox-group v-model="dto.filters.tags"
+                                               @change="checkboxChange">
+                                <p v-for="tag in data.tags">
+                                    <el-checkbox :label="tag.key">{{ tag.key }} ({{ tag.docCount }})</el-checkbox>
                                 </p>
                             </el-checkbox-group>
                         </div>
@@ -61,9 +64,10 @@
                     <div class="aside">
                         <div class="aside-title">年代</div>
                         <div class="aside-content">
-                            <el-checkbox-group v-model="dto.filters.dynastyList">
-                                <p v-for="tag in data.dynastyList" >
-                                    <el-checkbox :label="tag.key" >{{tag.key  }} ({{tag.docCount}})</el-checkbox>
+                            <el-checkbox-group v-model="dto.filters.dynastyList"
+                                               @change="checkboxChange">
+                                <p v-for="tag in data.dynastyList">
+                                    <el-checkbox :label="tag.key">{{ tag.key }} ({{ tag.docCount }})</el-checkbox>
                                 </p>
                             </el-checkbox-group>
                         </div>
@@ -72,9 +76,10 @@
                     <div class="aside">
                         <div class="aside-title">作者</div>
                         <div class="aside-content">
-                            <el-checkbox-group v-model="dto.filters.authorList">
-                                <p v-for="tag in data.authorList" >
-                                    <el-checkbox :label="tag.key" >{{tag.key  }} ({{tag.docCount}})</el-checkbox>
+                            <el-checkbox-group v-model="dto.filters.authorList"
+                                               @change="checkboxChange">
+                                <p v-for="tag in data.authorList">
+                                    <el-checkbox :label="tag.key">{{ tag.key }} ({{ tag.docCount }})</el-checkbox>
                                 </p>
                             </el-checkbox-group>
                         </div>
@@ -83,9 +88,10 @@
                     <div class="aside">
                         <div class="aside-title">类型</div>
                         <div class="aside-content">
-                            <el-checkbox-group v-model="dto.filters.typeList">
-                                <p v-for="tag in data.typeList" >
-                                    <el-checkbox :label="tag.key" >{{tag.key  }}({{tag.docCount}})</el-checkbox>
+                            <el-checkbox-group v-model="dto.filters.typeList"
+                                               @change="checkboxChange">
+                                <p v-for="tag in data.typeList">
+                                    <el-checkbox :label="tag.key">{{ tag.key }}({{ tag.docCount }})</el-checkbox>
                                 </p>
                             </el-checkbox-group>
                         </div>
@@ -99,10 +105,11 @@
 </template>
 
 <script setup lang="ts">
-    import {onMounted, reactive, ref} from 'vue';
+    import {onMounted, reactive, ref, watch} from 'vue';
     import Header from "@/components/Header.vue";
     import {getSearchList} from "@/api/module/search";
     import {useRouter, useRoute} from "vue-router";
+    import gaps from 'gsap';
 
     components:{
         Header
@@ -113,6 +120,7 @@
         activeIndex: string,
         keyword: string,
         total: number,
+        totalNum: number,
         took: number,
         poetryList: any[],
         tags: any[],
@@ -122,7 +130,7 @@
     }
 
     // 右侧 过滤项
-    interface FilterDto{
+    interface FilterDto {
         tags: string[],
         dynastyList: string[],
         authorList: string[],
@@ -138,7 +146,6 @@
     }
 
 
-
     const router = useRouter();
     const route = useRoute();
 
@@ -147,6 +154,7 @@
         activeIndex: "/index",
         keyword: "",
         total: 0,
+        totalNum: 0,
         took: 100,
         poetryList: [],
         tags: [],
@@ -191,36 +199,45 @@
         console.log("点击搜索=dto:", dto);
         getSearchList(dto).then((res: any) => {
             console.log("res:", res);
-            let tagsList = res.data.aggregation.filter(item=>item.key === 'tags');
-            if(tagsList){
-                data.tags =tagsList[0]?.list;
+            let tagsList = res.data.aggregation.filter(item => item.key === 'tags');
+            if (tagsList) {
+                data.tags = tagsList[0]?.list;
             }
-            let dynastyList = res.data.aggregation.filter(item=>item.key === 'dynasty');
-            if(dynastyList){
-                data.dynastyList =dynastyList[0]?.list;
+            let dynastyList = res.data.aggregation.filter(item => item.key === 'dynasty');
+            if (dynastyList) {
+                data.dynastyList = dynastyList[0]?.list;
             }
-            let authorList = res.data.aggregation.filter(item=>item.key === 'author.keyword');
-            if(authorList){
-                data.authorList =authorList[0]?.list;
+            let authorList = res.data.aggregation.filter(item => item.key === 'author.keyword');
+            if (authorList) {
+                data.authorList = authorList[0]?.list;
             }
-            let typeList = res.data.aggregation.filter(item=>item.key === 'type');
-            if(typeList){
-                data.typeList =typeList[0]?.list;
+            let typeList = res.data.aggregation.filter(item => item.key === 'type');
+            if (typeList) {
+                data.typeList = typeList[0]?.list;
             }
             // 结果集
-            data.took=res.data.took;
-            data.total=res.data.total;
-            data.poetryList=res.data.records;
+            data.took = res.data.took;
+            data.total = res.data.total;
+            data.poetryList = res.data.records;
         })
     }
 
-    const checkboxChange=(value: string[])=>{
-        console.log("多选框：value：",value)
+    const checkboxChange = (value: string[]) => {
+        console.log("多选框：value：", value);
+        search();
     }
+
+    // 监听一下总数变化
+    watch(() => data.total, (newVal, oldVal) => {
+        gaps.to(data, {
+            duration: 0.5,
+            totalNum: newVal
+        })
+    });
 
     onMounted(() => {
         // 得到地址栏q参数
-        dto.kw  = <string>route.query?.q;
+        dto.kw = <string>route.query?.q;
         search();
     })
 </script>

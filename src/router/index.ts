@@ -17,13 +17,17 @@ const routes:Array<RouteRecordRaw> = [     //主路由模块容器
         name: 'index',
         component: () => import("@/views/index.vue"),
         meta:{
-            title:"首页"
+            title:"首页",
+            transition:'animate__zoomInDown'
         }
     },
     {
         path: '/search',
         name: 'search',
-        component: () => import("@/views/search/index.vue")
+        component: () => import("@/views/search/index.vue"),
+        // meta:{
+        //     transition: 'animate__slideInUp'
+        // }
     }
 ]
 const router = createRouter({

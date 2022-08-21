@@ -8,7 +8,7 @@
                     <p>包含 5.5 万首唐诗、26 万首宋诗、2.1 万首宋词和其他古典文集。诗人包括唐宋两朝近 1.4 万古诗人，和两宋时期 1.5 千古词人。数据来源于互联网。</p>
                 </div>
                 <el-autocomplete class="search-input"
-                                 v-model="keyword"
+                                 v-model="dto.kw"
                                  :clearable="true"
                                  :fetch-suggestions="searchSuggest"
                                  popper-class="my-autocomplete"
@@ -23,18 +23,18 @@
                     </template>
 
                     <template #default="{ item }">
-                        <div class="value">{{ item.key }}</div>
-                        <div class="value">{{ item.value }}</div>
+                        <div class="suggest-type">{{ item.type }}</div>
+                        <div class="suggest-text">{{ item.text.length>30?item.text.slice(0,30)+'...':item.text }}</div>
                     </template>
                 </el-autocomplete>
                 <div class="search-tip-footer">
                     <p>热门检索:
-                        <span>李白</span>
-                        <span>杜甫</span>
-                        <span>王维</span>
-                        <span>白居易</span>
-                        <span>苏轼</span>
-                        <span>胖不了小陆</span>
+                        <span @click="goSearch('李白')">李白</span>
+                        <span @click="goSearch('杜甫')">杜甫</span>
+                        <span @click="goSearch('王维')">王维</span>
+                        <span @click="goSearch('白居易')">白居易</span>
+                        <span @click="goSearch('苏轼')">苏轼</span>
+                        <span @click="goSearch('胖不了小陆')">胖不了小陆</span>
                     </p>
                     <p>数据来源：https://github.com/chinese-poetry/chinese-poetry</p>
                 </div>
@@ -48,49 +48,55 @@
 <script setup lang="ts">
     import {onMounted, reactive, ref} from 'vue';
     import {useRouter} from "vue-router";
+    import {getSuggest} from "@/api/module/search";
 
     // 提示的对象
     interface SuggestItem {
-        key: string
-        value: string
+        type: string
+        text: string
+    }
+    interface Dto {
+        kw: string
     }
 
     const router = useRouter();
     const suggestKwList = ref<SuggestItem[]>([]);
-
-    const keyword = ref<string>('');
+    const dto = reactive<Dto>({
+        kw:''
+    });
 
     // todo 提示，自动补全
-    const searchSuggest = (kw: string, cb) => {
-        console.log("kw=", kw);
-        console.log("suggestKwList:", suggestKwList);
-        setTimeout(() => {
-            suggestKwList.value = [];
-            suggestKwList.value.push({
-                key: "title",
-                value: "李白"
-            });
-            suggestKwList.value.push({
-                key: "content",
-                value: "诗仙"
+    const searchSuggest = (kw: string, cb:(arg: any) => void) => {
+        if(dto.kw){
+            getSuggest(dto).then((res)=>{
+                if(res.code == 200 && res.data){
+                    suggestKwList.value=res.data;
+                    cb(suggestKwList.value);
+                }
             })
-            suggestKwList.value.push({
-                key: "title",
-                value: "杜甫"
-            })
-        }, 200);
-        cb(suggestKwList.value);
+        }else {
+            cb([]);
+        }
     }
+
     const selectSuggest = (item: SuggestItem) => {
-        console.log("选中提示词:", item.key, item.value);
-        keyword.value = item.value;
+        console.log("选中提示词:", item.type, item.text);
+        dto.kw = item.text;
     }
 
     const toSearch = () => {
-        console.log("q=", keyword.value);
+        console.log("q=", dto.kw);
         router.push({
             name: "search", query: {
-                q: keyword.value
+                q: dto.kw
+            }
+        });
+    }
+
+    const goSearch=(kw)=>{
+        router.push({
+            name: "search", query: {
+                q: kw
             }
         });
     }
@@ -105,6 +111,16 @@
     width: 100%;
     height: 100vh;
     background: #111 url('@/assets/images/bg.jpg') no-repeat center;
+  }
+
+  .suggest-type{
+    display: inline-block;
+    margin-right: 20px;
+    color: #999;
+    width: 60px;
+  }
+  .suggest-text{
+    display: inline-block;
   }
 
   .main {
@@ -140,6 +156,10 @@
           span {
             display: inline-block;
             margin-right: 10px;
+            &:hover{
+              cursor: pointer;
+              color: #f88a05;
+            }
           }
         }
 

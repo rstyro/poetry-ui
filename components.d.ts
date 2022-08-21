@@ -29,6 +29,7 @@ declare module '@vue/runtime-core' {
     IEpAim: typeof import('~icons/ep/aim')['default']
     IEpEdit: typeof import('~icons/ep/edit')['default']
     IEpSearch: typeof import('~icons/ep/search')['default']
+    LoadingBar: typeof import('./src/components/LoadingBar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Undefined: typeof import('./src/components/index.vue')['default']
