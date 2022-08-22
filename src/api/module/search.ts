@@ -10,3 +10,8 @@ export const getSuggest =(dto:any)=>{
 export const getSearchList =(dto:any)=>{
     return http.post('search/list',dto)
 }
+
+// 详情
+export const getDetail =(id:string)=>{
+    return http.get('search/getDetail/'+id)
+}
