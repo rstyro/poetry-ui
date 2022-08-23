@@ -28,6 +28,14 @@ const routes:Array<RouteRecordRaw> = [     //主路由模块容器
         // meta:{
         //     transition: 'animate__slideInUp'
         // }
+    },
+    {
+        path: '/detail',
+        name: 'detail',
+        component: () => import("@/views/search/detail.vue"),
+        // meta:{
+        //     transition: 'animate__slideInUp'
+        // }
     }
 ]
 const router = createRouter({

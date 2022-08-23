@@ -3,7 +3,7 @@
         <div class="main">
             <div class="main-inner">
                 <div class="search-tip">
-                    <h1>古文检索</h1>
+                    <h1>中华古文检索</h1>
                     <p>这是一个最全的中华古典文集数据库检索系统</p>
                     <p>包含 5.5 万首唐诗、26 万首宋诗、2.1 万首宋词和其他古典文集。诗人包括唐宋两朝近 1.4 万古诗人，和两宋时期 1.5 千古词人。数据来源于互联网。</p>
                 </div>
@@ -110,7 +110,18 @@
   .container {
     width: 100%;
     height: 100vh;
-    background: #111 url('@/assets/images/bg.jpg') no-repeat center;
+    //background: #111 url('@/assets/images/bg.jpg') no-repeat center;
+
+    background-image: url('@/assets/images/bg.jpg');
+    /* 背景图垂直、水平均居中 */
+    background-position: center center;
+    /* 背景图不平铺 */
+    background-repeat: no-repeat;
+    /* 当内容高度大于图片高度时，背景图像的位置相对于viewport固定 */
+    background-attachment: fixed;
+    /* 让背景图基于容器大小伸缩 */
+    background-size: cover;
+    background-color: #111;
   }
 
   .suggest-type{

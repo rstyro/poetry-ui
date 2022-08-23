@@ -9,7 +9,7 @@
                     :router="true"
                     @select="handleSelect"
             >
-                <el-menu-item index="/">古文检索</el-menu-item>
+                <el-menu-item index="/">中华古文检索</el-menu-item>
                 <div class="flex-grow"></div>
                 <el-menu-item index="/index">首页</el-menu-item>
                 <el-menu-item index="/flyFlower">飞花令</el-menu-item>
