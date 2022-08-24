@@ -60,7 +60,7 @@
     const route = useRoute();
 
     // 数据初始化
-    const data: Data = reactive<Data>({
+    let data: Data = reactive<Data>({
         id: "",
         activeIndex: "/index",
         keyword: "",
@@ -76,7 +76,10 @@
 
     const getDetailInfo = (id:string)=>{
       getDetail(id).then((res)=>{
-        console.log(res)
+        console.log(res);
+        if(res.status == 200){
+          data=res.data;
+        }
       });
     }
 

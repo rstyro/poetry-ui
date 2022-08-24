@@ -28,7 +28,7 @@
                     <el-card class="poetry-card" v-for="item of data.poetryList">
                         <template #header>
                             <div class="poetry-title">
-                                <span>{{ item.title }}</span>
+                                <span @click="toDetail(item._id)">{{ item.title }}</span>
                             </div>
                         </template>
 
@@ -225,6 +225,15 @@
     const checkboxChange = (value: string[]) => {
         console.log("多选框：value：", value);
         search();
+    }
+
+    // 去详情页
+    const toDetail = (id:string)=>{
+      router.push({
+        name: "detail", query: {
+          id: id
+        }
+      });
     }
 
     // 监听一下总数变化
