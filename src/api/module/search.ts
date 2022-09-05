@@ -13,5 +13,5 @@ export const getSearchList =(dto:any)=>{
 
 // 详情
 export const getDetail =(id:string)=>{
-    return http.get('search/getDetail/'+id)
+    return http.get('search/detail/'+id)
 }

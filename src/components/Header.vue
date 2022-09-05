@@ -10,9 +10,8 @@
                     @select="handleSelect"
             >
                 <el-menu-item index="/">
-<!--                  <div class="logo logo-anim">中华古文检索</div>-->
                   <el-image
-                      style="height: 90px;width: 120px"
+                      style="height: 100%;"
                       :src="logoImg"
                       fit="cover"
                       class="logo-shiny"
