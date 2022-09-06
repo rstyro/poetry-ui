@@ -27,7 +27,7 @@
                 <div class="left">
                     <el-card class="poetry-card" v-for="item of data.poetryList">
                         <template #header>
-                            <div class="poetry-title">
+                            <div class="poetry-title title-animate">
                                 <span @click="toDetail(item._id)">{{ item.title }}</span>
                             </div>
                         </template>
@@ -310,6 +310,89 @@
 
           .poetry-title {
             font-size: 26px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: inline-block;
+            outline: none;
+            border-radius: 5px;
+            padding: 0 10px;
+          }
+
+          /*标题特效*/
+          .title-animate {
+            height: 40px;
+            line-height: 42px;
+            border: none;
+
+            /*线条颜色*/
+            $lineColor: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
+            //$lineColor: linear-gradient(to top, #a8edea 0%, #fed6e3 100%);
+
+
+            &:before,&:after {
+              position: absolute;
+              content: "";
+              right: 0;
+              top: 0;
+              background: $lineColor;
+              transition: all 0.3s ease;
+            }
+            &:before {
+              height: 0%;
+              width: 2px;
+            }
+            &:after {
+              width: 0%;
+              height: 2px;
+            }
+            &:hover{
+              background: transparent;
+              box-shadow: none;
+            }
+            &:hover:before {
+              height: 100%;
+            }
+            &:hover:after {
+              width: 100%;
+            }
+
+
+            span {
+              position: relative;
+              display: block;
+              width: 100%;
+              height: 100%;
+              padding: 0 10px;
+              margin-left: -10px;
+              &:hover{
+                //color: rgba(2,126,251,1);
+              }
+              &:before,
+              &:after {
+                position: absolute;
+                content: "";
+                left: 0;
+                bottom: 0;
+                background: $lineColor;
+                transition: all 0.3s ease;
+              }
+              &:before {
+                width: 2px;
+                height: 0%;
+              }
+              &:after {
+                width: 0%;
+                height: 2px;
+              }
+              &:hover:before {
+                height: 100%;
+              }
+              &:hover:after {
+                width: 100%;
+              }
+            }
+
 
           }
 
