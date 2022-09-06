@@ -24,7 +24,7 @@
 
             <div class="result">为您找到相关结果约 {{ data.totalNum.toFixed(0) }} 个结果 ，查询耗时 {{ data.took }}毫秒</div>
             <div class="content">
-                <div class="left">
+                <div class="left" >
                     <el-card class="poetry-card" v-for="item of data.poetryList">
                         <template #header>
                             <div class="poetry-title title-animate">
@@ -46,7 +46,17 @@
                     </el-card>
 
 
+                  <div class="content-page">
+                    <el-pagination
+                        :page-size="20"
+                        :pager-count="11"
+                        layout="prev, pager, next"
+                        :total="1000"
+                    />
+                  </div>
+
                 </div>
+
                 <div class="right">
                     <div class="aside">
                         <div class="aside-title">标签</div>
@@ -222,6 +232,10 @@
         })
     }
 
+    const moreDate = ()=>{
+      console.log("more。。。。")
+    }
+
     const checkboxChange = (value: string[]) => {
         console.log("多选框：value：", value);
         search();
@@ -364,7 +378,6 @@
               width: 100%;
               height: 100%;
               padding: 0 10px;
-              margin-left: -10px;
               &:hover{
                 //color: rgba(2,126,251,1);
               }
@@ -374,12 +387,14 @@
                 content: "";
                 left: 0;
                 bottom: 0;
+                margin-left: -10px;
                 background: $lineColor;
                 transition: all 0.3s ease;
               }
               &:before {
                 width: 2px;
                 height: 0%;
+
               }
               &:after {
                 width: 0%;
@@ -414,6 +429,10 @@
               margin-left: 20px;
             }
           }
+        }
+
+        .content-page{
+          margin-top: 80px;
         }
 
       }

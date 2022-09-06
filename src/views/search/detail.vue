@@ -2,11 +2,29 @@
     <div class="container">
         <Header></Header>
         <div class="main">
-            <div class="content">
-              {{data}}
+          <el-card class="content">
+
+            <div class="detail-header">
+              <h1 class="detail-title">明月几时有</h1>
+              <div class="detail-meta">
+                <span>
+                  <span>数据更新于</span>
+                  <span>2022-09-01</span>
+                </span>
+                <el-divider direction="vertical" />
+                <span>
+                  <span>浏览数</span>
+                  <span>10k</span>
+                </span>
+                <el-divider direction="vertical" />
+              </div>
+              <div class="detail-body">
+                  <div>五言一遍最殷勤，调少情多似有因。</div>
+                  <div>不会当时翻曲意，此声肠断为何人。</div>
+              </div>
             </div>
 
-
+          </el-card>
         </div>
     </div>
 
@@ -80,110 +98,36 @@
     height: 100%;
     margin: 0px;
     padding: 0px;
-  }
 
-  .main {
+    .main {
 
-    .main-header {
-      margin: 0px auto;
-      width: 100%;
-      height: 150px;
-      //background-image: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%);
-      background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
+      .content {
+        min-height: 700px;
+        max-width: 900px;
+        margin: 100px auto;
+        overflow: auto;
+        padding: 25px;
 
-      .main-header-input {
-        max-width: $mainWidth;
-        padding-top: 50px;
-        margin: 0px auto;
-      }
+        .detail-header{
+          opacity: 1;
+          display: block;
 
-    }
-
-    .result {
-      color: #999;
-      font-size: 13px;
-      line-height: 39px;
-      max-width: $mainWidth;
-      margin: 0px auto;
-    }
-
-    .content {
-      display: flex;
-      justify-content: space-around;
-      min-height: 700px;
-      max-width: $mainWidth;
-      margin: 30px auto;
-      overflow: auto;
-
-      .left {
-        flex-grow: 1;
-
-        .poetry-card {
-          margin-bottom: 20px;
-
-
-          :deep(.el-card__header) {
-            //padding-bottom: 0px;
-            border: 0px;
-          }
-
-          :deep(.el-card__body) {
-            padding-top: 0px;
-          }
-
-          .poetry-title {
+          .detail-title{
+            text-align: center;
             font-size: 26px;
-
+            font-weight: 400;
           }
-
-          .poetry-content {
-            letter-spacing: 5px;
-            padding: 20px 0px;
-
-            p {
-              font-size: 16px;
-              padding-bottom: 10px;
-            }
-          }
-
-          .poetry-tags {
-            color: #999;
+          .detail-meta{
+            margin-bottom: 60px;
+            margin-top: 5px;
             font-size: 12px;
-
-            .tag:nth-child(n+2) {
-              margin-left: 20px;
-            }
+            text-align: center;
           }
         }
 
       }
-
-      .right {
-        min-width: 350px;
-        margin-left: 50px;
-
-        .aside {
-          padding: 20px;
-          //border: 1px solid #999999;
-          background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
-
-          &:nth-child(n+2) {
-            margin-top: 20px;
-          }
-
-          .aside-title {
-            font-size: 26px;
-            //background: #fbc2eb;
-          }
-
-          .aside-content {
-            margin-top: 20px;
-          }
-        }
-      }
-
     }
-  }
 
+  }
 
 </style>
