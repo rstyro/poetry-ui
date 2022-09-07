@@ -10,6 +10,9 @@ const config: AxiosRequestConfig = {
     // 定义消息头
     headers: {
         "Content-Type": "application/json; charset=utf-8",
+        "token": "rstyro",
+        "pageNum":1,
+        "pageSize":10
     }
 }
 // 创建 axios 实例
