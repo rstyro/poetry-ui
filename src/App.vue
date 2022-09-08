@@ -3,6 +3,7 @@
         <transition :enter-active-class="`animate__animated  ${route.meta.transition}`">
             <component :is="Component"></component>
         </transition>
+      <el-backtop :right="100" :bottom="100" />
     </router-view>
 </template>
 

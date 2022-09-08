@@ -113,7 +113,6 @@
     </div>
   </div>
 
-
 </template>
 
 <script setup lang="ts">
@@ -225,7 +224,7 @@ const search = () => {
 // 请求数据
 const getData=(param:any,pageNum:number)=>{
   getSearchList(param,pageNum).then((res: any) => {
-    if(res.data.aggregation && res.data.aggregation.length>0){
+    if(res.data?.aggregation && res.data?.aggregation?.length>0){
       let tagsList = res.data.aggregation.filter(item => item.key === 'tags');
       if (tagsList) {
         data.tags = tagsList[0]?.list;
@@ -244,10 +243,12 @@ const getData=(param:any,pageNum:number)=>{
       }
     }
     // 结果集
-    data.took = res.data.took;
-    data.total = res.data.total;
-    data.page.total = res.data.total;
-    data.poetryList = res.data.records;
+    if(res.data){
+      data.took = res.data.took;
+      data.total = res.data.total;
+      data.page.total = res.data.total;
+      data.poetryList = res.data.records;
+    }
   })
 }
 
@@ -482,6 +483,7 @@ onMounted(() => {
     .right {
       min-width: 350px;
       margin-left: 50px;
+      position: relative;
 
       .aside {
         padding: 20px;
@@ -501,6 +503,8 @@ onMounted(() => {
           margin-top: 20px;
         }
       }
+
+
     }
 
   }

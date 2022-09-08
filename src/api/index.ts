@@ -34,6 +34,9 @@ http.interceptors.request.use(
 http.interceptors.response.use(
     (response:AxiosResponse) => {
         const res = response.data;
+        if(res.code != 200){
+            ElMessage.error(res.msg);
+        }
         // 响应数据
         return res;
     },
