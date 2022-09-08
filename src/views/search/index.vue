@@ -5,13 +5,14 @@
       <div class="main-header">
         <div class="main-header-input">
           <el-input v-model="dto.kw"
+                    :clearable="true"
                     size="large"
-                    @keydown.enter="search"
+                    @keydown.enter="toSearch"
                     placeholder="请输入搜索的关键字">
             <template #append>
               <el-button class="btn-search"
 
-                         @click="search">
+                         @click="toSearch">
                 <el-icon class="el-icon--left">
                   <i-ep-search/>
                 </el-icon>
@@ -205,8 +206,17 @@ const dto: Dto = reactive({
   filters: {},
 });
 
+// 新的关键词检索
+const toSearch = () => {
+  console.log("q=", dto.kw);
+  router.push({
+    name: "search", query: {
+      q: dto.kw
+    }
+  });
+}
 
-// 点击搜索
+// 首次获取数据
 const search = () => {
   data.page.pageNum=1;
   getData(dto,1);
@@ -271,6 +281,7 @@ watch(() => data.total, (newVal, oldVal) => {
     totalNum: newVal
   })
 });
+
 
 onMounted(() => {
   // 得到地址栏q参数
