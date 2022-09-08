@@ -28,7 +28,7 @@
           <el-card class="poetry-card" v-for="item of data.poetryList">
             <template #header>
               <div class="poetry-title title-animate">
-                <span @click="toDetail(item._id)">{{ item.title }}</span>
+                <span @click="toDetail(item._id)" v-html="`${item.title.length>27?item.title.slice(0,27)+'....':item.title}`"></span>
               </div>
             </template>
 
@@ -37,11 +37,11 @@
             </div>
 
             <div class="poetry-content">
-              <p v-for="(text,index) in item.content.slice(0,3)">{{ index < 2 ? text : '......' }}</p>
+              <p v-for="(text,index) in item.content.slice(0,3)" v-html="`${index < 2 ? text : '......'}`"></p>
             </div>
 
             <div style="width: 150px;float: right">
-              <el-divider content-position="right">{{ item.author }}</el-divider>
+              <el-divider content-position="right"><span v-html="item.author"></span></el-divider>
             </div>
           </el-card>
 
@@ -216,7 +216,6 @@ const search = () => {
 const getData=(param:any,pageNum:number)=>{
   getSearchList(param,pageNum).then((res: any) => {
     if(res.data.aggregation && res.data.aggregation.length>0){
-      console.log("?")
       let tagsList = res.data.aggregation.filter(item => item.key === 'tags');
       if (tagsList) {
         data.tags = tagsList[0]?.list;
@@ -288,6 +287,8 @@ onMounted(() => {
   padding: 0px;
 }
 
+
+
 .main {
 
   .main-header {
@@ -345,7 +346,9 @@ onMounted(() => {
           display: inline-block;
           outline: none;
           border-radius: 5px;
-          padding: 0 10px;
+          padding-left: 0px;
+          padding-right: 10px;
+
         }
 
         /*标题特效*/
@@ -366,6 +369,7 @@ onMounted(() => {
             top: 0;
             background: $lineColor;
             transition: all 0.3s ease;
+            margin-right: 10px;
           }
 
           &:before {
@@ -397,7 +401,8 @@ onMounted(() => {
             display: block;
             width: 100%;
             height: 100%;
-            padding: 0 10px;
+            //padding: 0 10px;
+            padding-right: 10px;
 
             &:hover {
               //color: rgba(2,126,251,1);

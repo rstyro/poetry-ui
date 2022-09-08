@@ -21,16 +21,45 @@
                  <el-icon class="meta-icon"><i-ep-user/></el-icon>
                   <span v-text="`作者： ${data.item.author}`"></span>
                 </span>
+
             <el-divider direction="vertical"/>
             <span class="detail-meta-item">
-                  <el-icon class="meta-icon"><i-ep-folder/></el-icon>
-                  <span v-text="data.item.section"></span>
+                 <el-icon class="meta-icon"><i-ep-folder/></el-icon>
+                  <span v-text="`分类： ${data.item.type}`"></span>
                 </span>
+            <el-divider direction="vertical" v-if="data.item.section"/>
+            <span class="detail-meta-item"  v-if="data.item.section">
+                  <el-icon class="meta-icon"><i-ep-collection/></el-icon>
+                  <span v-text="`合集：${data.item.section}`"></span>
+                </span>
+            <el-divider direction="vertical" v-if="data.item.dynasty"/>
+            <span class="detail-meta-item"  v-if="data.item.dynasty">
+                  <el-icon class="meta-icon"><i-ep-location/></el-icon>
+                  <span v-text="`${data.item.dynasty}`"></span>
+                </span>
+          </div>
+        </div>
 
-          </div>
-          <div class="detail-body">
-            <div v-for="(e,index) of data.item.content" v-text="e"></div>
-          </div>
+        <div class="detail-body">
+          <div v-for="(e,index) of data.item.content" v-text="e" class="detail-body-item"></div>
+        </div>
+
+        <div class="detail-footer">
+          <el-tag v-for="(item,index) in data.item.tags" :key="index" effect="light" class="footer-tag">
+            <el-icon class="el-icon--left"><i-ep-price-tag/></el-icon> {{ item }}
+          </el-tag>
+        </div>
+
+
+        <div class="detail-remark" v-if="data.item.translations">
+          <el-collapse>
+            <el-collapse-item title="译文或注释">
+              <template #title>
+                <el-icon class="el-icon--left"><i-ep-info-filled/></el-icon> <b>译文或注释</b>
+              </template>
+              <div v-for="(e,index) of data.item.translations" v-text="e" class="detail-body-item"></div>
+            </el-collapse-item>
+          </el-collapse>
         </div>
 
       </el-card>
@@ -71,7 +100,7 @@ const data = reactive<any>({
       "唐朝"
     ],
     type: [
-      "七言诗"
+      "七言诗",
     ],
     translations: [],
   }
@@ -119,8 +148,8 @@ onMounted(() => {
         }
 
         .detail-meta {
-          margin-bottom: 60px;
-          margin-top: 5px;
+          margin-bottom: 80px;
+          margin-top: 20px;
           font-size: 12px;
           text-align: center;
 
@@ -142,9 +171,29 @@ onMounted(() => {
 
         }
       }
-
       .detail-body {
         text-align: center;
+        //font-size: 18px;
+
+        .detail-body-item{
+          margin-bottom: 10px;
+          letter-spacing: 3px;
+
+        }
+      }
+
+      .detail-footer{
+        margin-top: 100px;
+        margin-bottom: 30px;
+
+        .footer-tag{
+          margin-right: 10px;
+        }
+      }
+
+
+      .detail-remark{
+
       }
 
     }
