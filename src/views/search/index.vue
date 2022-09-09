@@ -60,54 +60,109 @@
         </div>
 
         <div class="right">
-          <div class="aside">
-            <div class="aside-title">标签</div>
-            <div class="aside-content">
+
+          <el-collapse>
+            <el-collapse-item title="标签" name="tags">
+              <template #title>
+                <h2 class="collapse-title">标签</h2>
+              </template>
+
               <el-checkbox-group v-model="dto.filters.tags"
                                  @change="checkboxChange">
                 <p v-for="tag in data.tags">
                   <el-checkbox :label="tag.key">{{ tag.key }} ({{ tag.docCount }})</el-checkbox>
                 </p>
               </el-checkbox-group>
-            </div>
-          </div>
+            </el-collapse-item>
 
-
-          <div class="aside">
-            <div class="aside-title">年代</div>
-            <div class="aside-content">
+            <el-collapse-item title="年代" name="dynastyList">
+              <template #title>
+                <h2 class="collapse-title">年代</h2>
+              </template>
               <el-checkbox-group v-model="dto.filters.dynastyList"
                                  @change="checkboxChange">
                 <p v-for="tag in data.dynastyList">
                   <el-checkbox :label="tag.key">{{ tag.key }} ({{ tag.docCount }})</el-checkbox>
                 </p>
               </el-checkbox-group>
-            </div>
-          </div>
+            </el-collapse-item>
 
-          <div class="aside">
-            <div class="aside-title">作者</div>
-            <div class="aside-content">
+            <el-collapse-item title="作者" name="authorList">
+              <template #title>
+                <h2 class="collapse-title">作者</h2>
+              </template>
               <el-checkbox-group v-model="dto.filters.authorList"
                                  @change="checkboxChange">
                 <p v-for="tag in data.authorList">
                   <el-checkbox :label="tag.key">{{ tag.key }} ({{ tag.docCount }})</el-checkbox>
                 </p>
               </el-checkbox-group>
-            </div>
-          </div>
+            </el-collapse-item>
 
-          <div class="aside">
-            <div class="aside-title">类型</div>
-            <div class="aside-content">
+
+            <el-collapse-item title="类型" name="typeList">
+              <template #title>
+                <h2 class="collapse-title">类型</h2>
+              </template>
               <el-checkbox-group v-model="dto.filters.typeList"
                                  @change="checkboxChange">
                 <p v-for="tag in data.typeList">
                   <el-checkbox :label="tag.key">{{ tag.key }}({{ tag.docCount }})</el-checkbox>
                 </p>
               </el-checkbox-group>
-            </div>
-          </div>
+            </el-collapse-item>
+
+          </el-collapse>
+
+
+<!--          <div class="aside">-->
+<!--            <div class="aside-title">标签</div>-->
+<!--            <div class="aside-content">-->
+<!--              <el-checkbox-group v-model="dto.filters.tags"-->
+<!--                                 @change="checkboxChange">-->
+<!--                <p v-for="tag in data.tags">-->
+<!--                  <el-checkbox :label="tag.key">{{ tag.key }} ({{ tag.docCount }})</el-checkbox>-->
+<!--                </p>-->
+<!--              </el-checkbox-group>-->
+<!--            </div>-->
+<!--          </div>-->
+
+
+<!--          <div class="aside">-->
+<!--            <div class="aside-title">年代</div>-->
+<!--            <div class="aside-content">-->
+<!--              <el-checkbox-group v-model="dto.filters.dynastyList"-->
+<!--                                 @change="checkboxChange">-->
+<!--                <p v-for="tag in data.dynastyList">-->
+<!--                  <el-checkbox :label="tag.key">{{ tag.key }} ({{ tag.docCount }})</el-checkbox>-->
+<!--                </p>-->
+<!--              </el-checkbox-group>-->
+<!--            </div>-->
+<!--          </div>-->
+
+<!--          <div class="aside">-->
+<!--            <div class="aside-title">作者</div>-->
+<!--            <div class="aside-content">-->
+<!--              <el-checkbox-group v-model="dto.filters.authorList"-->
+<!--                                 @change="checkboxChange">-->
+<!--                <p v-for="tag in data.authorList">-->
+<!--                  <el-checkbox :label="tag.key">{{ tag.key }} ({{ tag.docCount }})</el-checkbox>-->
+<!--                </p>-->
+<!--              </el-checkbox-group>-->
+<!--            </div>-->
+<!--          </div>-->
+
+<!--          <div class="aside">-->
+<!--            <div class="aside-title">类型</div>-->
+<!--            <div class="aside-content">-->
+<!--              <el-checkbox-group v-model="dto.filters.typeList"-->
+<!--                                 @change="checkboxChange">-->
+<!--                <p v-for="tag in data.typeList">-->
+<!--                  <el-checkbox :label="tag.key">{{ tag.key }}({{ tag.docCount }})</el-checkbox>-->
+<!--                </p>-->
+<!--              </el-checkbox-group>-->
+<!--            </div>-->
+<!--          </div>-->
         </div>
       </div>
     </div>
@@ -186,19 +241,19 @@ const dto: Dto = reactive({
   aggsList: [
     {
       "key": "type",
-      "size": 10
+      "size": 1000
     },
     {
       "key": "dynasty",
-      "size": 10
+      "size": 1000
     },
     {
       "key": "tags",
-      "size": 10
+      "size": 1000
     },
     {
       "key": "author.keyword",
-      "size": 10
+      "size": 1000
     }
 
   ],
@@ -207,12 +262,12 @@ const dto: Dto = reactive({
 
 // 新的关键词检索
 const toSearch = () => {
-  console.log("q=", dto.kw);
   router.push({
     name: "search", query: {
       q: dto.kw
     }
   });
+  search();
 }
 
 // 首次获取数据
@@ -484,6 +539,14 @@ onMounted(() => {
       min-width: 350px;
       margin-left: 50px;
       position: relative;
+
+      .collapse-title{
+        vertical-align: middle;
+
+        span,i{
+          vertical-align: middle;
+        }
+      }
 
       .aside {
         padding: 20px;

@@ -34,6 +34,8 @@ declare module '@vue/runtime-core' {
     IEpPrice: typeof import('~icons/ep/price')['default']
     IEpPriceTag: typeof import('~icons/ep/price-tag')['default']
     IEpSearch: typeof import('~icons/ep/search')['default']
+    IEpTag: typeof import('~icons/ep/tag')['default']
+    IEpTags: typeof import('~icons/ep/tags')['default']
     IEpUser: typeof import('~icons/ep/user')['default']
     IEpView: typeof import('~icons/ep/view')['default']
     LoadingBar: typeof import('./src/components/LoadingBar.vue')['default']

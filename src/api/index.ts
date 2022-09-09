@@ -41,6 +41,7 @@ http.interceptors.response.use(
         return res;
     },
     (error) => {
+        ElMessage.error('请求接口失败，请检查你的网络!');
         return Promise.reject(error);
     }
 )
