@@ -44,6 +44,14 @@ const routes:Array<RouteRecordRaw> = [     //主路由模块容器
         meta:{
             title:"飞花令",
         }
+    },
+    {
+        path: '/about',
+        name: 'about',
+        component: () => import("@/views/about/index.vue"),
+        meta:{
+            title:"关于我",
+        }
     }
 ]
 const router = createRouter({
