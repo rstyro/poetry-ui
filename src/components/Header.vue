@@ -9,7 +9,7 @@
                     :router="true"
                     @select="handleSelect"
             >
-                <el-menu-item index="/">
+                <el-menu-item index="index">
                   <el-image
                       style="height: 100%;"
                       :src="logoImg"
@@ -18,13 +18,13 @@
                   />
                 </el-menu-item>
                 <div class="flex-grow"></div>
-                <el-menu-item index="/index">首页</el-menu-item>
-                <el-menu-item index="/flyFlower">飞花令</el-menu-item>
-                <el-menu-item index="/about">关于</el-menu-item>
-                <el-sub-menu index="/user">
+                <el-menu-item index="search">首页</el-menu-item>
+                <el-menu-item index="flyFlower">飞花令</el-menu-item>
+                <el-menu-item index="about">关于</el-menu-item>
+                <el-sub-menu index="user">
                     <template #title>我的</template>
-                    <el-menu-item index="/edit">编辑</el-menu-item>
-                    <el-menu-item index="/logout">退出</el-menu-item>
+                    <el-menu-item index="edit">编辑</el-menu-item>
+                    <el-menu-item index="logout">退出</el-menu-item>
                 </el-sub-menu>
             </el-menu>
         </div>
@@ -34,10 +34,12 @@
 </template>
 
 <script setup lang="ts">
-    import {Ref, ref} from 'vue';
+    import {Ref, ref,computed} from 'vue';
+    import { useRoute} from "vue-router";
     import logoImg from '@/assets/images/logo.png';
 
-    const activeIndex: Ref<string> = ref("/index");
+    const route = useRoute();
+    const activeIndex= ref(computed(() => route.name));
     const handleSelect = (key: string, keyPath: string[]) => {
         console.log(key, keyPath)
     }

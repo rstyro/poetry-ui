@@ -7,10 +7,10 @@ export const getSuggest = (dto: any) => {
 }
 
 // 搜索
-export const getSearchList = (dto: any,pageNum:number ) => {
+export const getSearchList = (dto: any, pageNum: number) => {
     return http.post('search/list', dto, {
         headers: {
-            "pageNum":pageNum || 1,
+            "pageNum": pageNum || 1,
         }
     })
 }
@@ -18,4 +18,14 @@ export const getSearchList = (dto: any,pageNum:number ) => {
 // 详情
 export const getDetail = (id: string) => {
     return http.get('search/detail/' + id)
+}
+
+// 飞花令
+export const getFlyFlower = (text: any, pageNum: number) => {
+    return http.get('search/flyFlower', {
+        params: {text: text},
+        headers: {
+            "pageNum": pageNum || 1,
+        }
+    })
 }

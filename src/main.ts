@@ -15,6 +15,8 @@ router.beforeEach((to:RouteLocationNormalized, from:RouteLocationNormalized, nex
     if(to.path==="/search" && to.query.q){
         // 把搜索的内容变成标题
         document.title=to.query.q;
+    } else if(to.meta.title){
+        document.title=to.meta.title;
     }
     next();
 })

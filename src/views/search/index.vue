@@ -61,7 +61,7 @@
 
         <div class="right">
 
-          <el-collapse>
+          <el-collapse v-model="data.activeNames">
             <el-collapse-item title="标签" name="tags">
               <template #title>
                 <h2 class="collapse-title">标签</h2>
@@ -183,7 +183,7 @@ components:{
 
 // data数据对象
 interface Data {
-  activeIndex: string,
+  activeNames: string,
   keyword: string,
   total: number,
   totalNum: number,
@@ -218,7 +218,7 @@ const route = useRoute();
 
 // 数据初始化
 const data: Data = reactive<Data>({
-  activeIndex: "/index",
+  activeNames : "tags",
   keyword: "",
   total: 0,
   totalNum: 0,
@@ -301,7 +301,8 @@ const getData=(param:any,pageNum:number)=>{
     if(res.data){
       data.took = res.data.took;
       data.total = res.data.total;
-      data.page.total = res.data.total;
+      // 最多分页10000条
+      data.page.total = Math.min(res.data.total,10000);
       data.poetryList = res.data.records;
     }
   })

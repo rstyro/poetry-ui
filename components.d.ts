@@ -31,6 +31,7 @@ declare module '@vue/runtime-core' {
     IEpFolder: typeof import('~icons/ep/folder')['default']
     IEpInfoFilled: typeof import('~icons/ep/info-filled')['default']
     IEpLocation: typeof import('~icons/ep/location')['default']
+    IEpPosition: typeof import('~icons/ep/position')['default']
     IEpPrice: typeof import('~icons/ep/price')['default']
     IEpPriceTag: typeof import('~icons/ep/price-tag')['default']
     IEpSearch: typeof import('~icons/ep/search')['default']
