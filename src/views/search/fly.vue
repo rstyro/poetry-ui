@@ -7,7 +7,7 @@
                   :clearable="true"
                   size="large"
                   @keydown.enter="getData"
-                  placeholder="请输入搜索的关键字">
+                  placeholder="请输入飞花令的关键字">
           <template #append>
             <el-button class="btn-search"
 

@@ -24,7 +24,7 @@
       </div>
 
       <div class="result">为您找到相关结果约 {{ data.totalNum.toFixed(0) }} 个结果 ，查询耗时 {{ data.took }}毫秒</div>
-      <div class="content">
+      <div v-show="data.poetryList.length>0" class="content">
         <div class="left">
           <el-card class="poetry-card" v-for="item of data.poetryList">
             <template #header>
@@ -165,6 +165,8 @@
 <!--          </div>-->
         </div>
       </div>
+      <el-skeleton class="loading-skeleton" v-show="data.poetryList.length==0" :rows="5" animated />
+
     </div>
   </div>
 
@@ -174,6 +176,7 @@
 import {onMounted, reactive, ref, watch} from 'vue';
 import Header from "@/components/Header.vue";
 import {getSearchList} from "@/api/module/search";
+import {sleep} from "@/assets/js/utils";
 import {useRouter, useRoute} from "vue-router";
 import gaps from 'gsap';
 
@@ -260,6 +263,8 @@ const dto: Dto = reactive({
   filters: {},
 });
 
+
+
 // 新的关键词检索
 const toSearch = () => {
   router.push({
@@ -278,6 +283,10 @@ const search = () => {
 
 // 请求数据
 const getData=(param:any,pageNum:number)=>{
+  data.poetryList =[];
+  // await sleep(2000).then(() => {
+  //   console.log(".....")
+  // });
   getSearchList(param,pageNum).then((res: any) => {
     if(res.data?.aggregation && res.data?.aggregation?.length>0){
       let tagsList = res.data.aggregation.filter(item => item.key === 'tags');
@@ -358,6 +367,11 @@ onMounted(() => {
 
 
 .main {
+
+  .loading-skeleton{
+    max-width: $mainWidth;
+    margin: 0px auto;
+  }
 
   .main-header {
     margin: 0px auto;
