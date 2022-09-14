@@ -2,7 +2,7 @@
   <div class="container">
     <Header></Header>
     <div class="main">
-      <el-card class="content">
+      <el-card class="detail-content">
 
         <div class="detail-header">
           <h1 class="detail-title" v-text="data.item.title"></h1>
@@ -130,7 +130,7 @@ onMounted(() => {
 
   .main {
 
-    .content {
+    .detail-content {
       min-height: 700px;
       max-width: 900px;
       margin: 100px auto;

@@ -20,7 +20,7 @@
           </template>
         </el-input>
       </div>
-      <el-card class="content" v-show="data.list.length>0">
+      <el-card class="fly-content" v-show="data.list.length>0">
         <div v-for="(e,index) of data.list" class="">
           <div class="fly-line">
             <div v-html="e.content"></div>
@@ -119,7 +119,7 @@ onMounted(() => {
       margin: 50px 0;
     }
 
-    .content {
+    .fly-content {
       min-height: 700px;
       padding: 25px;
 
@@ -127,14 +127,10 @@ onMounted(() => {
         cursor: pointer;
 
         &:hover {
-          color: #00a76f;
+          color: #409eff;
         }
       }
-
-      .fly-line {
-      }
     }
-
 
   }
 

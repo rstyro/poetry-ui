@@ -42,7 +42,7 @@
             </div>
 
             <div style="width: 150px;float: right">
-              <el-divider content-position="right"><span v-html="item.author"></span></el-divider>
+              <el-divider content-position="right" class="poetry-card-footer"><span v-html="item.author"></span></el-divider>
             </div>
           </el-card>
 
@@ -61,7 +61,7 @@
 
         <div class="right">
 
-          <el-collapse v-model="data.activeNames">
+          <el-collapse v-model="data.activeNames" class="collapse">
             <el-collapse-item title="标签" name="tags">
               <template #title>
                 <h2 class="collapse-title">标签</h2>
@@ -165,7 +165,7 @@
 <!--          </div>-->
         </div>
       </div>
-      <el-skeleton class="loading-skeleton" v-show="data.poetryList.length==0" :rows="5" animated />
+      <el-skeleton class="loading-skeleton"  v-show="data.poetryList.length==0" :rows="5" animated />
 
     </div>
   </div>
@@ -282,7 +282,7 @@ const search = () => {
 }
 
 // 请求数据
-const getData=(param:any,pageNum:number)=>{
+const getData= (param:any,pageNum:number)=>{
   data.poetryList =[];
   // await sleep(2000).then(() => {
   //   console.log(".....")
