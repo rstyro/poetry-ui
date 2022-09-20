@@ -4,8 +4,14 @@ import App from './App.vue'
 import router from "./router";
 import {NavigationGuardNext, RouteLocationNormalized} from "vue-router";
 import LoadingBar from './components/LoadingBar.vue';
+import {createPinia} from 'pinia';
+// 持久化存储pinia
+import piniaPluginPersist from 'pinia-plugin-persist'
 
-createApp(App).use(router).mount('#app')
+const store = createPinia()
+store.use(piniaPluginPersist)
+
+createApp(App).use(store).use(router).mount('#app')
 
 const vNode = createVNode(LoadingBar);
 render(vNode,document.body)

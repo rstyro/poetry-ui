@@ -41,32 +41,42 @@
 </template>
 
 <script setup lang="ts">
-import {Ref, ref, computed, watch, reactive} from 'vue';
+import {Ref, ref, computed, watch, reactive, onMounted} from 'vue';
 import {useRoute} from "vue-router";
 import logoImg from '@/assets/images/logo.png';
-import { Sunny, Moon } from '@element-plus/icons-vue'
+import { Sunny, Moon } from '@element-plus/icons-vue';
+import {useMainStore} from "@/store/index.js"
 
 const route = useRoute();
+const store = useMainStore();
 const activeIndex = ref(computed(() => route.name));
 const handleSelect = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath)
+  // console.log(key, keyPath);
 }
 
 const data = reactive<any>({
-  theme : true,
+  theme : store.theme,
 });
 
 // 监听一下主题变化
 watch(() => data.theme, (newVal, oldVal) => {
   console.log("val:",newVal,oldVal);
-  if(newVal){
+  // 修改pinia
+  // store.changeTheme(newVal);
+  store.theme=newVal;
+  changeCssTheme(data.theme);
+});
+
+const changeCssTheme=(theme:boolean)=>{
+  if(theme){
     window.document.getElementById("app").setAttribute('data-theme', "light");
   }else {
     window.document.getElementById("app").setAttribute('data-theme', "dark");
   }
-});
-
-//
+}
+onMounted(() => {
+  changeCssTheme(data.theme);
+})
 
 </script>
 
