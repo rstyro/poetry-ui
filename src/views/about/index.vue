@@ -20,14 +20,11 @@
         <div class="line">欢迎来到我的介绍页</div>
 
         <!-- 动态打字效果 -->
-        <h1 align="center">
-          <a href="http://rstyro.gitee.io/blog/">
-            <img src="https://readme-typing-svg.herokuapp.com?color=F74D18&lines=别把你的小朋友弄丢了，别人捡到是不会还的。;年轻的时候，梦想在远方。在远方的时候，梦想在家乡&center=true&size=23&width=1000">
-          </a>
-        </h1>
-
-        <!-- 贪吃蛇代码贡献图  https://cdn.githubjs.cf/-->
-        <div align="center"><img src="https://cdn.githubjs.cf/rstyro/rstyro/blob/master/assets/github-contribution-grid-snake.svg" /></div>
+<!--        <h1 align="center">-->
+<!--          <a href="http://rstyro.gitee.io/blog/">-->
+<!--            <img src="https://readme-typing-svg.herokuapp.com?color=F74D18&lines=别把你的小朋友弄丢了，别人捡到是不会还的。;年轻的时候，梦想在远方。在远方的时候，梦想在家乡&center=true&size=23&width=800">-->
+<!--          </a>-->
+<!--        </h1>-->
 
       </div>
     </div>

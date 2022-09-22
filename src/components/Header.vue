@@ -21,11 +21,11 @@
         <el-menu-item index="search">首页</el-menu-item>
         <el-menu-item index="flyFlower">飞花令</el-menu-item>
         <el-menu-item index="about">关于</el-menu-item>
-        <el-sub-menu index="user">
-          <template #title>我的</template>
-          <el-menu-item index="edit">编辑</el-menu-item>
-          <el-menu-item index="logout">退出</el-menu-item>
-        </el-sub-menu>
+<!--        <el-sub-menu index="user">-->
+<!--          <template #title>我的</template>-->
+<!--          <el-menu-item index="edit">编辑</el-menu-item>-->
+<!--          <el-menu-item index="logout">退出</el-menu-item>-->
+<!--        </el-sub-menu>-->
       </el-menu>
       <el-switch
           v-model="data.theme"
